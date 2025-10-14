@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-//Uso de postman
+
 const API = process.env.NEXT_PUBLIC_API_BASE_URL; 
 
 export interface Schedule {

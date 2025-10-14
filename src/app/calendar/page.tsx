@@ -41,9 +41,8 @@ export default function CalendarPage() {
 
             <div className="flex justify-center md:block hidden">
                 <MyCalendarPage 
-                    selectedDate={selectedDate}
-                    fixerId={"fixer_user_001"}
-                    requesterId={"req_user_001"}
+                    fixerId={"uuid-fixer-1234"}
+                    requesterId={"uuid-user-4567"}
                 />
             </div>
 
@@ -55,9 +54,8 @@ export default function CalendarPage() {
                 <div></div>
                 <MobileList
                     selectedDate={selectedDate}
-
-                    fixerId={"fixer_user_001"}
-                    requesterId={"req_user_001"}
+                    fixerId={"uuid-fixer-1234"}
+                    requesterId={"uuid-user-4567"}
 
                 />
             </div>
