@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Field, Label, Input, Select } from '.'
+import { Modal } from '@/Components/Modal'
 
 export type FieldOption = { label: string; value: string }
 export type FieldKind = 'text' | 'email' | 'phone' | 'select' | 'file'
@@ -23,6 +24,7 @@ const FixerRegisterForm: React.FC<FixerRegisterFormProps> = ({
   fields,
   onSubmit,
 }) => {
+  const [modalOpen, setModalOpen] = useState(false)
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
@@ -30,10 +32,30 @@ const FixerRegisterForm: React.FC<FixerRegisterFormProps> = ({
     const payload: Record<string, FormDataEntryValue> = {}
     for (const [k, v] of data.entries()) payload[k] = v
     onSubmit?.(payload)
+    
+    setModalOpen(true)
   }
 
   return (
     <div className="mx-auto w-full max-w-md rounded-xl border border-black bg-white p-6">
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Registro enviado"
+        size="sm"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-gray-700">Tus datos se han enviado correctamente.</p>
+          <div className="flex justify-end gap-2">
+            <button
+              className="px-3 py-2 rounded-md bg-blue-600 text-white"
+              onClick={() => setModalOpen(false)}
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </Modal>
       <h2 className="mb-6 text-center text-xl font-bold">{title}</h2>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
