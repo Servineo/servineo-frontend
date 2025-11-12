@@ -1,7 +1,10 @@
+
 export interface JobOffer {
   id: string
   fixerId: string
   fixerName: string
+  fixerPhoto?: string
+  title: string
   description: string
   tags: string[]
   whatsapp: string
@@ -10,6 +13,8 @@ export interface JobOffer {
   price: number
   createdAt: Date
   city: string
+  rating?: number
+  completedJobs?: number
   location: {
     lat: number
     lng: number
@@ -20,13 +25,23 @@ export interface JobOffer {
 export interface Fixer {
   id: string
   name: string
-  whatsapp: string
+  email?: string
+  phone: string
+  photo?: string
+  city: string
+  rating?: number
+  completedJobs: number
   services: string[]
+  bio?: string
+  joinDate: Date
+  jobOffers: JobOffer[]
+  paymentMethods: string[]
+  whatsapp?: string
 }
 
 // Mock de ubicación del usuario
 export const userLocation = {
-  lat: -17.3940,
+  lat: -17.394,
   lng: -66.1474,
   address: "UMSS, Cochabamba, Bolivia",
 }
@@ -43,203 +58,274 @@ export const availableServices = [
   "Reparación de electrodomésticos",
   "Instalación de pisos",
   "Techado",
+  
 ]
 
 // Mock de FIXER actual (simulando usuario logueado)
 export const currentFixer: Fixer = {
   id: "fixer-001",
   name: "Juan Carlos Pérez",
-  whatsapp: "+591 70341618",
+  email: "juan.perez@example.com",
+  phone: "59170341618",
+  whatsapp: "59170341618",
+  photo: "/img/avatars/fixer-001.jpg",
+  city: "Cochabamba",
+  rating: 4.8,
+  completedJobs: 124,
   services: ["Plomería", "Electricidad", "Carpintería"],
+  bio: "Soy un técnico con más de 5 años de experiencia en trabajos de electricidad y plomería. Me apasiona mi trabajo y siempre busco la satisfacción del cliente.",
+  joinDate: new Date("2022-01-15"),
+  jobOffers: [],
+  paymentMethods: ["Efectivo", "Transferencia", "QR"],
 }
 
-// Mock de ofertas de trabajo iniciales
+// Mock de ofertas de trabajo
 let _mockJobOffers: JobOffer[] = [
   {
     id: "offer-001",
     fixerId: "fixer-001",
-    fixerName: "Ana Martínez",
-    description:
-      "Especialista en muebles a medida, puertas, ventanas y todo tipo de trabajos en madera. Más de 10 años de experiencia en carpintería fina.",
-    tags: ["Carpintería", "Muebles", "Restauración"],
-    whatsapp: "+591 73456789",
+    fixerName: "Juan Carlos Pérez",
+    fixerPhoto: "/img/avatars/fixer-001.jpg",
+    title: "Servicios de Plomería y Electricidad",
+    description: "Especialista en reparaciones de plomería e instalaciones eléctricas. Soluciones rápidas y garantizadas.",
+    tags: ["Plomería", "Electricidad", "Reparaciones"],
+    whatsapp:  "59170341618",
     photos: ["/img/carpinteria1.jpg", "/img/carpinteria2.jpg", "/img/carpinteria3.jpg"],
-    services: ["Carpintería"],
-    price: 49,
+    services: ["Plomería", "Electricidad"],
+    price: 150,
+    rating: 4.8,
+    completedJobs: 124,
     createdAt: new Date("2025-01-15"),
     city: "Cochabamba",
     location: {
-      lat: -17.3935, // Cerca de la UMSS (500m)
+      lat: -17.3935,
       lng: -66.1468,
       address: "Av. Oquendo #234, Cochabamba",
     },
+    
   },
   {
-    id: "offer-005",
-    fixerId: "fixer-005",
-    fixerName: "Roberto Vargas",
-    description: "Electricista certificado con experiencia en instalaciones residenciales y comerciales. Atención 24/7 para emergencias.",
-    tags: ["Electricidad", "Instalaciones", "Emergencias"],
-    whatsapp: "+591 75432198",
-    photos: ["/img/cons1.png", "/img/construccion1.jpg"],
-    services: ["Electricidad"],
-    price: 40,
-    createdAt: new Date("2025-01-16"),
+    id: "offer-001",
+    fixerId: "fixer-001",
+    fixerName: "Juan Carlos Pérez",
+    fixerPhoto: "/img/avatars/fixer-001.jpg",
+    title: "Servicios de Plomería y Electricidad",
+    description: "Especialista en reparaciones de plomería e instalaciones eléctricas. Soluciones rápidas y garantizadas.",
+    tags: ["Plomería", "Electricidad", "Reparaciones"],
+    whatsapp:  "59170341618",
+    photos: ["/img/carpinteria1.jpg", "/img/carpinteria2.jpg", "/img/carpinteria3.jpg"],
+    services: ["Plomería", "Electricidad"],
+    price: 150,
+    rating: 4.8,
+    completedJobs: 124,
+    createdAt: new Date("2025-01-15"),
     city: "Cochabamba",
     location: {
-      lat: -17.3930, // Muy cerca de la UMSS (300m)
-      lng: -66.1470,
-      address: "Calle Jordan #567, Cochabamba",
+      lat: -17.3935,
+      lng: -66.1468,
+      address: "Av. Oquendo #234, Cochabamba",
     },
+    
   },
   {
-    id: "offer-006",
-    fixerId: "fixer-006",
-    fixerName: "Patricia Medina",
-    description: "Servicio profesional de pintura interior y exterior. Acabados texturizados y decorativos.",
-    tags: ["Pintura", "Decoración", "Acabados"],
-    whatsapp: "+591 76543219",
-    photos: ["/img/construccion2.jpg", "/img/cons1.png"],
-    services: ["Pintura"],
-    price: 35,
-    createdAt: new Date("2025-01-16"),
+    id: "offer-001",
+    fixerId: "fixer-001",
+    fixerName: "Juan Carlos Pérez",
+    fixerPhoto: "/img/avatars/fixer-001.jpg",
+    title: "Servicios de Plomería y Electricidad",
+    description: "Especialista en reparaciones de plomería e instalaciones eléctricas. Soluciones rápidas y garantizadas.",
+    tags: ["Plomería", "Electricidad", "Reparaciones"],
+    whatsapp:  "59170341618",
+    photos: ["/img/carpinteria1.jpg", "/img/carpinteria2.jpg", "/img/carpinteria3.jpg"],
+    services: ["Plomería", "Electricidad"],
+    price: 150,
+    rating: 4.8,
+    completedJobs: 124,
+    createdAt: new Date("2025-01-15"),
     city: "Cochabamba",
     location: {
-      lat: -17.3950, // A 800m de la UMSS
-      lng: -66.1485,
-      address: "Av. América E. #789, Cochabamba",
+      lat: -17.3935,
+      lng: -66.1468,
+      address: "Av. Oquendo #234, Cochabamba",
     },
+    
   },
   {
-    id: "offer-007",
-    fixerId: "fixer-007",
-    fixerName: "Jorge Flores",
-    description: "Plomero especializado en reparaciones e instalaciones. Detección y reparación de fugas.",
-    tags: ["Plomería", "Reparaciones", "Emergencias"],
-    whatsapp: "+591 71234598",
-    photos: ["/img/construccion3.jpg", "/img/construccion1.jpg"],
-    services: ["Plomería"],
-    price: 45,
-    createdAt: new Date("2025-01-17"),
+    id: "offer-001",
+    fixerId: "fixer-001",
+    fixerName: "Juan Carlos Pérez",
+    fixerPhoto: "/img/avatars/fixer-001.jpg",
+    title: "Servicios de Plomería y Electricidad",
+    description: "Especialista en reparaciones de plomería e instalaciones eléctricas. Soluciones rápidas y garantizadas.",
+    tags: ["Plomería", "Electricidad", "Reparaciones"],
+    whatsapp:  "59170341618",
+    photos: ["/img/carpinteria1.jpg", "/img/carpinteria2.jpg", "/img/carpinteria3.jpg"],
+    services: ["Plomería", "Electricidad"],
+    price: 150,
+    rating: 4.8,
+    completedJobs: 124,
+    createdAt: new Date("2025-01-15"),
     city: "Cochabamba",
     location: {
-      lat: -17.3920, // A 600m de la UMSS
-      lng: -66.1460,
-      address: "Calle Lanza #432, Cochabamba",
+      lat: -17.3935,
+      lng: -66.1468,
+      address: "Av. Oquendo #234, Cochabamba",
     },
+    
   },
   {
-    id: "offer-008",
-    fixerId: "fixer-008",
-    fixerName: "Miguel Torres",
-    description: "Técnico en climatización y aire acondicionado. Instalación y mantenimiento de equipos.",
-    tags: ["Climatización", "Mantenimiento", "Instalaciones"],
-    whatsapp: "+591 79876543",
-    photos: ["/img/cons1.png", "/img/construccion2.jpg"],
-    services: ["Reparación de electrodomésticos"],
-    price: 55,
-    createdAt: new Date("2025-01-17"),
+    id: "offer-001",
+    fixerId: "fixer-001",
+    fixerName: "Juan Carlos Pérez",
+    fixerPhoto: "/img/avatars/fixer-001.jpg",
+    title: "Servicios de Plomería y Electricidad",
+    description: "Especialista en reparaciones de plomería e instalaciones eléctricas. Soluciones rápidas y garantizadas.",
+    tags: ["Plomería", "Electricidad", "Reparaciones"],
+    whatsapp:  "59170341618",
+    photos: ["/img/carpinteria1.jpg", "/img/carpinteria2.jpg", "/img/carpinteria3.jpg"],
+    services: ["Plomería", "Electricidad"],
+    price: 150,
+    rating: 4.8,
+    completedJobs: 124,
+    createdAt: new Date("2025-01-15"),
     city: "Cochabamba",
     location: {
-      lat: -17.3970, // A 1.2km de la UMSS
-      lng: -66.1495,
-      address: "Av. Ayacucho #901, Cochabamba",
+      lat: -17.3935,
+      lng: -66.1468,
+      address: "Av. Oquendo #234, Cochabamba",
     },
+    
   },
   {
-    id: "offer-009",
-    fixerId: "fixer-009",
-    fixerName: "Laura Guzmán",
-    description: "Diseñadora de interiores y decoradora. Especialista en optimización de espacios pequeños.",
-    tags: ["Diseño", "Decoración", "Remodelación"],
-    whatsapp: "+591 72345678",
-    photos: ["/img/carpinteria1.jpg", "/img/carpinteria2.jpg"],
-    services: ["Diseño"],
-    price: 60,
-    createdAt: new Date("2025-01-18"),
+    id: "offer-001",
+    fixerId: "fixer-001",
+    fixerName: "Juan Carlos Pérez",
+    fixerPhoto: "/img/avatars/fixer-001.jpg",
+    title: "Servicios de Plomería y Electricidad",
+    description: "Especialista en reparaciones de plomería e instalaciones eléctricas. Soluciones rápidas y garantizadas.",
+    tags: ["Plomería", "Electricidad", "Reparaciones"],
+    whatsapp:  "59170341618",
+    photos: ["/img/carpinteria1.jpg", "/img/carpinteria2.jpg", "/img/carpinteria3.jpg"],
+    services: ["Plomería", "Electricidad"],
+    price: 150,
+    rating: 4.8,
+    completedJobs: 124,
+    createdAt: new Date("2025-01-15"),
     city: "Cochabamba",
     location: {
-      lat: -17.3890, // A 1.5km de la UMSS
-      lng: -66.1440,
-      address: "Av. Ballivián #345, Cochabamba",
+      lat: -17.3935,
+      lng: -66.1468,
+      address: "Av. Oquendo #234, Cochabamba",
     },
+    
   },
   {
-    id: "offer-010",
-    fixerId: "fixer-010",
-    fixerName: "Daniel Rojas",
-    description: "Jardinero profesional. Diseño y mantenimiento de áreas verdes, sistemas de riego.",
-    tags: ["Jardinería", "Paisajismo", "Mantenimiento"],
-    whatsapp: "+591 77654321",
-    photos: ["/img/construccion1.jpg", "/img/cons1.png"],
-    services: ["Jardinería"],
-    price: 40,
-    createdAt: new Date("2025-01-18"),
+    id: "offer-001",
+    fixerId: "fixer-001",
+    fixerName: "Juan Carlos Pérez",
+    fixerPhoto: "/img/avatars/fixer-001.jpg",
+    title: "Servicios de Plomería y Electricidad",
+    description: "Especialista en reparaciones de plomería e instalaciones eléctricas. Soluciones rápidas y garantizadas.",
+    tags: ["Plomería", "Electricidad", "Reparaciones"],
+    whatsapp:  "59170341618",
+    photos: ["/img/carpinteria1.jpg", "/img/carpinteria2.jpg", "/img/carpinteria3.jpg"],
+    services: ["Plomería", "Electricidad"],
+    price: 150,
+    rating: 4.8,
+    completedJobs: 124,
+    createdAt: new Date("2025-01-15"),
     city: "Cochabamba",
     location: {
-      lat: -17.3925, // A 400m de la UMSS
-      lng: -66.1465,
-      address: "Calle Baptista #678, Cochabamba",
+      lat: -17.3935,
+      lng: -66.1468,
+      address: "Av. Oquendo #234, Cochabamba",
     },
+    
   },
-  {
-    id: "offer-002",
-    fixerId: "fixer-002",
-    fixerName: "Luis Fernández",
-    description:
-      "Constructor profesional especializado en obras residenciales, ampliaciones y remodelaciones. Trabajo garantizado y presupuestos sin compromiso.",
-    tags: ["Construcción", "Albañilería", "Remodelaciones"],
-    whatsapp: "+591 74561234",
-    photos: ["/img/construccion1.jpg", "/img/construccion2.jpg", "/img/construccion3.jpg"],
-    services: ["Albañilería"],
-    price: 65,
-    createdAt: new Date("2025-01-14"),
-    city: "La Paz",
-    location: {
-      lat: -16.5,
-      lng: -68.15,
-      address: "Av. Arce #234, La Paz",
-    },
-  },
-  {
-    id: "offer-003",
-    fixerId: "fixer-003",
-    fixerName: "Carlos Mendoza",
-    description:
-      "Servicio integral de construcción y remodelación. Especialista en acabados de primera calidad y optimización de espacios.",
-    tags: ["Construcción", "Diseño", "Acabados"],
-    whatsapp: "+591 76543210",
-    photos: ["/img/construccion3.jpg", "/img/construccion1.jpg", "/img/cons1.png"],
-    services: ["Albañilería", "Diseño"],
-    price: 55,
-    createdAt: new Date("2025-01-13"),
-    city: "Cochabamba",
-    location: {
-      lat: -17.3895,
-      lng: -66.1568,
-      address: "Av. América #456, Cochabamba",
-    },
-  },
-  {
-    id: "offer-004",
-    fixerId: "fixer-004",
-    fixerName: "María González",
-    description:
-      "Diseño y fabricación de muebles personalizados. Especialidad en cocinas integrales y closets a medida con los mejores materiales.",
-    tags: ["Carpintería", "Diseño", "Muebles"],
-    whatsapp: "+591 71234567",
-    photos: ["/img/carpinteria3.jpg", "/img/carpinteria1.jpg", "/img/carpinteria2.jpg"],
-    services: ["Carpintería", "Diseño"],
-    price: 45,
-    createdAt: new Date("2025-01-12"),
-    city: "El Alto",
-    location: {
-      lat: -16.5207,
-      lng: -68.1742,
-      address: "Av. 6 de Marzo #789, El Alto",
-    },
-  },
+
+  
+
+  // Add more mock job offers as needed
 ]
+
+// Mock de fixers
+// En src/app/lib/mock-data.ts
+export const mockFixers = [
+  {
+    id: "fixer-001",
+    name: "Juan Carlos Pérez",
+    email: "juan.perez@example.com",
+    phone: "59170341618",
+    whatsapp: "59170341618",
+    photo: "/img/avatars/fixer-001.jpg",
+    city: "Cochabamba",
+    rating: 4.8,
+    completedJobs: 124,
+    services: ["Plomería", "Electricidad", "Carpintería"],
+    bio: "Soy un técnico con más de 5 años de experiencia...",
+    joinDate: new Date("2022-01-15"),
+    paymentMethods: ["Efectivo", "Transferencia", "QR"],
+    jobOffers: [
+      {
+        id: "offer-001",
+        fixerId: "fixer-001",
+        fixerName: "Juan Carlos Pérez",
+        fixerPhoto: "/img/avatars/fixer-001.jpg",
+        title: "Servicios de Plomería",
+        description: "Reparación de fugas y tuberías",
+        price: 150,
+        city: "Cochabamba",
+        photos: ["/img/plomeria1.jpg"],
+        rating: 4.8,
+        completedJobs: 124,
+        // AÑADE ESTAS PROPIEDADES FALTANTES:
+        tags: ["Plomería", "Reparación", "Urgente"],
+        whatsapp: "59170341618",
+        services: ["Plomería"],
+        createdAt: new Date("2024-01-15"),
+        location: {
+          lat: -17.3935,
+          lng: -66.1468,
+          address: "Cochabamba, Bolivia"
+        }
+      },
+      {
+        id: "offer-002", 
+        fixerId: "fixer-001",
+        fixerName: "Juan Carlos Pérez", 
+        fixerPhoto: "/img/avatars/fixer-001.jpg",
+        title: "Instalación Eléctrica",
+        description: "Instalación y reparación de circuitos eléctricos",
+        price: 200,
+        city: "Cochabamba", 
+        photos: ["/img/electricidad1.jpg"],
+        rating: 4.8,
+        completedJobs: 124,
+        // NO OLVIDES ESTAS PROPIEDADES:
+        tags: ["Electricidad", "Instalación"],
+        whatsapp: "59170341618",
+        services: ["Electricidad"],
+        createdAt: new Date("2024-01-10"),
+        location: {
+          lat: -17.3935, 
+          lng: -66.1468,
+          address: "Cochabamba, Bolivia"
+        }
+      }
+    ]
+  }
+  // ... otros fixers con la misma estructura completa
+]
+// Update the job offers to include references to fixers
+_mockJobOffers = _mockJobOffers.map(offer => {
+  const fixer = mockFixers.find(f => f.id === offer.fixerId)
+  return {
+    ...offer,
+    fixerPhoto: fixer?.photo,
+    rating: fixer?.rating,
+    completedJobs: fixer?.completedJobs,
+  }
+})
 
 // Funciones mock para manejar ofertas
 export const mockJobOfferService = {
@@ -255,8 +341,10 @@ export const mockJobOfferService = {
     return newOffer
   },
 
-  updateOffer: (offerId: string, offer: Partial<JobOffer>) => {
-    _mockJobOffers = _mockJobOffers.map((o) => (o.id === offerId ? { ...o, ...offer } : o))
+  updateOffer: (offerId: string, updates: Partial<JobOffer>) => {
+    _mockJobOffers = _mockJobOffers.map((o) => 
+      o.id === offerId ? { ...o, ...updates } : o
+    )
     return _mockJobOffers.find((o) => o.id === offerId)
   },
 

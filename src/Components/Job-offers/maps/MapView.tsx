@@ -231,11 +231,11 @@ export function MapView({ offers, onOfferClick }: MapViewProps) {
 
   return (
     <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-lg border border-blue-200">
-      <div ref={mapRef} className="w-full h-full" />
+      <div ref={mapRef} className="w-full h-full relative z-0" />
 
       {hoveredOffer && (
         <div
-          className="absolute top-20 left-4 z-[1000] animate-in fade-in slide-in-from-left-8 duration-300"
+          className="absolute top-4 right-2 sm:top-20 sm:left-4 z-[1000] animate-in fade-in slide-in-from-right-8 sm:slide-in-from-left-8 duration-300"
           onMouseEnter={() => {
             if (hoverTimeoutRef.current) {
               clearTimeout(hoverTimeoutRef.current)

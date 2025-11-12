@@ -32,6 +32,21 @@ export function PaymentStep({
 }: PaymentStepProps) {
   const needsAccount = payments.includes("qr") || payments.includes("card")
 
+  const handleAccountChange = (value: string) => {
+    // Solo permitir números y limitar a 34 caracteres (máximo para CBU/IBAN)
+    const numericOnly = value.replace(/\D/g, "").slice(0, 34)
+    onAccountInfoChange(numericOnly)
+  }
+
+  const getAccountType = () => {
+    const length = accountInfo.length
+    if (length === 22) return "CBU"
+    if (length === 24) return "IBAN"
+    if (length > 0 && length < 22) return "Número incompleto"
+    if (length > 24) return "Número demasiado largo"
+    return ""
+  }
+
   return (
     <Card title="Métodos de pago aceptados">
       <div className="space-y-4">
@@ -55,14 +70,29 @@ export function PaymentStep({
         </div>
 
         {needsAccount && (
-          <div className="space-y-1 animate-fade-in">
-            <label className="text-sm text-gray-800">Cuenta para recibir pagos (CBU/IBAN/alias)</label>
+          <div className="space-y-2 animate-fade-in">
+            <label className="text-sm text-gray-800">Nro de Cuenta para recibir pagos</label>
             <input
               value={accountInfo}
-              onChange={(e) => onAccountInfoChange(e.target.value)}
-              placeholder="Ingrese su cuenta"
+              onChange={(e) => handleAccountChange(e.target.value)}
+              placeholder="Ingrese solo números de su cuenta"
+              maxLength={34}
               className="w-full rounded-full bg-gray-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400 transition-all"
             />
+            <div className="flex justify-between items-center px-2">
+              <p className="text-xs text-gray-600">
+                Solo números, máximo 34 caracteres ({accountInfo.length}/34)
+              </p>
+              <span className={`text-xs ${
+                accountInfo.length === 22 || accountInfo.length === 24 
+                  ? "text-green-600 font-medium" 
+                  : "text-gray-500"
+              }`}>
+                {getAccountType()}
+              </span>
+            </div>
+            
+            
           </div>
         )}
 

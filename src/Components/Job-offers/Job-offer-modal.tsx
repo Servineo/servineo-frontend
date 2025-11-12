@@ -14,11 +14,11 @@ export function JobOfferModal({ offer, isOpen, onClose }: Props) {
   if (!isOpen || !offer) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />
-      <div className="relative bg-white w-full max-w-3xl rounded-2xl border border-gray-200 shadow-xl overflow-hidden">
+      <div className="relative bg-white w-full max-w-3xl rounded-2xl border-primary border-2 shadow-xl overflow-hidden">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-white via-white to-primary/5 backdrop-blur-lg border-b border-border/50 p-6 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-gradient-to-r from-white via-white to-primary/5 backdrop-blur-lg border-b border-primary  p-6 flex items-center justify-between z-10 ">
           <div className="flex-1">
             <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
               {offer.fixerName}

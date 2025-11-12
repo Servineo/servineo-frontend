@@ -28,6 +28,16 @@ export function ExperienceStep({ experiences, onAddExperience, onDeleteExperienc
   const [description, setDescription] = useState("")
   const [uploading, setUploading] = useState(false)
 
+  const handleTitleChange = (value: string) => {
+    const sanitized = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "").slice(0, 20)
+    setTitle(sanitized)
+  }
+
+  const handleDescriptionChange = (value: string) => {
+    const sanitized = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s.,!?¿¡]/g, "").slice(0, 200)
+    setDescription(sanitized)
+  }
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -89,23 +99,25 @@ export function ExperienceStep({ experiences, onAddExperience, onDeleteExperienc
             <input
               type="text"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => handleTitleChange(e.target.value)}
               placeholder="Ej: Instalación eléctrica residencial"
-              maxLength={100}
+              maxLength={20}
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-400 transition-all"
             />
+            <p className="text-xs text-gray-600">Solo letras, máximo 20 caracteres ({title.length}/20)</p>
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-800">Descripción (opcional)</label>
             <textarea
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => handleDescriptionChange(e.target.value)}
               placeholder="Describe brevemente el trabajo realizado..."
-              maxLength={500}
+              maxLength={200}
               rows={3}
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-400 transition-all"
             />
+            <p className="text-xs text-gray-600">Solo letras y signos de puntuación, máximo 200 caracteres ({description.length}/200)</p>
           </div>
 
           <div className="space-y-2">

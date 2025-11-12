@@ -18,7 +18,7 @@ export function JobQuickInfo({ offer, onShowMore, distance }: JobQuickInfoProps)
   }
 
   return (
-    <div className="relative bg-white/60 backdrop-blur-md rounded-2xl shadow-lg border border-primary/80 p-5 min-w-[340px] max-w-[380px] animate-in fade-in slide-in-from-left-8 duration-300 overflow-hidden">
+    <div className="relative bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border-2 border-primary/80 p-5 min-w-[300px] max-w-[calc(100vw-2rem)] sm:max-w-[380px] animate-in fade-in slide-in-from-left-8 duration-300 overflow-hidden z-[1000]">
       <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent"></div>
 
       <div className="relative z-10">

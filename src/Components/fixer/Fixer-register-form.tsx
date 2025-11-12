@@ -115,18 +115,23 @@ export default function FixerRegisterForm({
           name="phone"
           control={control}
           render={({ field }) => (
-            <input
-              {...field}
-              id="phone"
-              type="tel"
-              className="w-full rounded-full border border-transparent bg-gray-200 px-4 py-2 text-sm outline-none placeholder:text-gray-500 focus:border-blue-500 focus:bg-gray-100 focus:ring-2 focus:ring-blue-400 transition-all"
-              placeholder="+591 70123456"
-              onChange={(e) => {
-                // Solo permitir números, +, - y espacios
-                const value = e.target.value.replace(/[^\d\s+-]/g, '')
-                field.onChange(value)
-              }}
-            />
+            <div className="relative">
+              <input
+                {...field}
+                id="phone"
+                type="tel"
+                className="w-full rounded-full border border-transparent bg-gray-200 px-4 py-2 text-sm outline-none placeholder:text-gray-500 focus:border-blue-500 focus:bg-gray-100 focus:ring-2 focus:ring-blue-400 transition-all pr-20"
+                placeholder="+591 70123456"
+                onChange={(e) => {
+                  // Solo permitir números, +, - y espacios
+                  const value = e.target.value.replace(/[^\d\s+-]/g, '')
+                  field.onChange(value)
+                }}
+              />
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+                {field.value ? field.value.replace(/\D/g, '').length : 0}/10 dígitos
+              </span>
+            </div>
           )}
         />
         {errors.phone && (
