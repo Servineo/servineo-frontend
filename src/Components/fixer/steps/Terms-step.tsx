@@ -7,7 +7,7 @@ interface TermsStepProps {
   onAcceptChange: (accepted: boolean) => void
   error?: string
 }
-
+//
 export function TermsStep({ accepted, onAcceptChange, error }: TermsStepProps) {
   return (
     <Card title="Términos y Condiciones">
