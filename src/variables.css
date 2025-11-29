@@ -1,0 +1,84 @@
+/* frontend/src/styles/variables.css */
+
+:root {
+  /* Colores Principales */
+  --primary-light: #1AA7ED;
+  --primary: #2B31E0;
+  --primary-medium: #2B6AE0;
+  
+  /* Colores de Acento */
+  --accent: #2BDDE0;
+  --accent-hover: #5E2BE0;
+  
+  /* Color de Realce */
+  --highlight: #759AE0;
+  
+  /* Neutros */
+  --bg-primary: #F9FAFB;
+  --bg-secondary: #E5E7EB;
+  --text-primary: #111827;
+  --surface-border: #D1D5DB;
+  
+  /* Estados */
+  --success: #16A34A;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  
+  /* Disponibilidad */
+  --available: #16A34A;
+  --reserved: #64748B;
+  --pending: #FFC857;
+  --blocked: #E6EDF3;
+  
+  /* Tipografía */
+  --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
+  
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 200ms ease-in-out;
+  --transition-slow: 300ms ease-in-out;
+}
+
+/* Importar Roboto desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
