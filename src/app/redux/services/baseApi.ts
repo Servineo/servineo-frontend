@@ -2,7 +2,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 // Force /api to use Next.js proxy
-const API_URL = '/api';
+const API_URL = 'https://servineo-backend.vercel.app/api';
 
 // Log para debugging (solo en desarrollo)
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
