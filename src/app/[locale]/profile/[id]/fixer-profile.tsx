@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useProfile } from './hooks/useProfile';
+import Image from 'next/image';
 
 type FixerProfileProps = {
   userId: string;
@@ -56,10 +57,13 @@ export default function FixerProfile({ userId }: FixerProfileProps) {
                   </svg>
                 </div>
               ) : (
-                <img
+                <Image
                   src={data.photo_url}
                   alt={data.name}
+                  width={96}
+                  height={96}
                   className='w-24 h-24 rounded-full object-cover'
+                  priority
                 />
               )}
 

@@ -19,6 +19,7 @@ import { IUser } from '@/types/user';
 import { fixerProfileSchema, type FixerProfileData } from '@/app/lib/validations/fixer-schemas';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';
+import NotificationModal from '../Modal-notifications';
 
 const DEFAULT_SERVICES: Service[] = [
   { id: 'svc-plumbing', name: 'Plomería' },
@@ -59,11 +60,19 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
   const total = 7; // 0 to 6
   const [success, setSuccess] = useState(false);
 
+  // Estados para el modal de notificación
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    type: 'success' as 'success' | 'error' | 'info' | 'warning',
+    title: '',
+    message: '',
+  });
+
   const methods = useForm<FixerProfileData>({
     resolver: zodResolver(fixerProfileSchema),
     defaultValues: {
       ci: '',
-      workLocation: { lat: -16.5, lng: -68.15 }, // Default location (La Paz approx)
+      workLocation: { lat: -16.5, lng: -68.15 },
       servicios: [],
       metodoPago: {
         hasEfectivo: false,
@@ -87,11 +96,9 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
     trigger,
     watch,
     setValue,
-    //control,
     formState: { isSubmitting, errors },
   } = methods;
 
-  // Watch values for conditional rendering or passing to steps
   const url_photo = watch('url_photo');
   const ci = watch('ci');
   const workLocation = watch('workLocation');
@@ -101,9 +108,6 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
   const vehiculo = watch('vehiculo');
   const acceptTerms = watch('acceptTerms');
 
-  // Helper to manage services state which is a bit complex for simple watch
-  // We'll keep the list of available services in local state if they can be added/removed dynamically
-  // But the selected IDs are in the form.
   const [availableServices, setAvailableServices] = useState<Service[]>(
     DEFAULT_SERVICES.map((s) => ({ id: s.id, name: s.name })),
   );
@@ -150,7 +154,6 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
     setStep((s) => Math.max(0, s - 1));
   };
 
-  // Service handlers
   const handleToggleService = (id: string) => {
     const current = servicios || [];
     const updated = current.includes(id) ? current.filter((x) => x !== id) : [...current, id];
@@ -178,7 +181,6 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
     );
   };
 
-  // Payment handlers
   const handleTogglePayment = (method: 'cash' | 'qr' | 'card') => {
     const current = { ...metodoPago };
     if (method === 'cash') current.hasEfectivo = !current.hasEfectivo;
@@ -188,7 +190,6 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
     setValue('metodoPago', current, { shouldValidate: true });
   };
 
-  // Helper to convert object to array for the step component
   const getPaymentArray = () => {
     const arr: ('cash' | 'qr' | 'card')[] = [];
     if (metodoPago?.hasEfectivo) arr.push('cash');
@@ -200,31 +201,32 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
   const onSubmit: SubmitHandler<FixerProfileData> = async (data) => {
     try {
       if (!user._id) {
-        console.error('User ID is missing');
+        setModalState({
+          isOpen: true,
+          type: 'error',
+          title: 'Error',
+          message: 'No se pudo identificar al usuario. Por favor, intenta nuevamente.',
+        });
         return;
       }
 
       const payload = {
-        id: user._id?.toString(), // ← por si acaso es ObjectId
+        id: user._id?.toString(),
         profile: {
           telefono: user.telefono,
           ci: data.ci.trim(),
-
-          // Solo servicios oficiales (los que empiezan con "svc-")
           services: data.servicios
             .filter((id): id is string => id.startsWith('svc-'))
             .map((id) => {
               const service = DEFAULT_SERVICES.find((s) => s.id === id);
               return { name: service?.name ?? 'Servicio desconocido' };
             }),
-
           vehicle: data.vehiculo.hasVehiculo
             ? {
                 hasVehiculo: true,
                 tipoVehiculo: data.vehiculo.tipoVehiculo || undefined,
               }
             : { hasVehiculo: false },
-
           paymentMethods: (() => {
             const methods: { type: string }[] = [];
             if (data.metodoPago.hasEfectivo) methods.push({ type: 'efectivo' });
@@ -232,14 +234,11 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
             if (data.metodoPago.tarjetaCredito) methods.push({ type: 'tarjeta' });
             return methods;
           })(),
-
           location: {
             lat: Number(data.workLocation.lat),
             lng: Number(data.workLocation.lng),
             direccion: data.workLocation.direccion?.trim() || '',
-            // NO enviamos departamento ni pais → rompe el backend
           },
-
           terms: {
             accepted: data.acceptTerms,
           },
@@ -248,20 +247,34 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
 
       console.log('Submitting user profile data:', payload);
       await convertToFixer(payload).unwrap();
+      
       setSuccess(true);
+      setModalState({
+        isOpen: true,
+        type: 'success',
+        title: '¡Registro Exitoso!',
+        message: `${user.name}, tu perfil de FIXER ha sido creado exitosamente. Tu cuenta está en revisión y pronto podrás comenzar a recibir solicitudes.`,
+      });
     } catch (error) {
       console.error('Error registering fixer:', error);
 
-      // Manejo tipado de errores
+      let errorMessage = 'Ocurrió un error al registrar tu perfil. Por favor, intenta nuevamente.';
+
       if (isErrorWithData(error)) {
-        console.error('API Error Data:', error.data);
+        const data = error.data;
+        errorMessage = data.message || data.error || errorMessage;
       } else if (isFetchBaseQueryError(error)) {
-        console.error('Fetch Error:', error);
+        errorMessage = `Error de conexión (${error.status}). Verifica tu conexión a internet.`;
       } else if (isSerializedError(error)) {
-        console.error('Serialized Error:', error.message);
-      } else {
-        console.error('Unknown error type');
+        errorMessage = error.message || errorMessage;
       }
+
+      setModalState({
+        isOpen: true,
+        type: 'error',
+        title: 'Error al Registrar',
+        message: errorMessage,
+      });
     }
   };
 
@@ -336,7 +349,7 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
                 onAccountInfoChange={(val) =>
                   setValue('accountInfo', val, { shouldValidate: true })
                 }
-                paymentsError={errors.metodoPago?.root?.message} // Check where error lands
+                paymentsError={errors.metodoPago?.root?.message}
                 accountError={errors.accountInfo?.message}
               />
             )}
@@ -404,6 +417,17 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
             </div>
           </form>
         )}
+
+        {/* Modal de Notificaciones */}
+        <NotificationModal
+          isOpen={modalState.isOpen}
+          onClose={() => setModalState((prev) => ({ ...prev, isOpen: false }))}
+          type={modalState.type}
+          title={modalState.title}
+          message={modalState.message}
+          autoClose={modalState.type === 'success'}
+          autoCloseDelay={4000}
+        />
       </div>
     </FormProvider>
   );

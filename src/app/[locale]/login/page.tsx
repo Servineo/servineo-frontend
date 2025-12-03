@@ -106,8 +106,8 @@ export default function LoginPage() {
         // Detectar si el backend requiere MFA/2FA y abrir los modales correspondientes
         const needs2FA = Boolean(
           datos.requires2FA ||
-          datos.mfaRequired ||
-          (datos.mfaMethods && datos.mfaMethods.length > 0),
+            datos.mfaRequired ||
+            (datos.mfaMethods && datos.mfaMethods.length > 0),
         );
 
         if (needs2FA) {

@@ -25,7 +25,7 @@ export default function JobPromotionsPage() {
       try {
         const jobData = await getJobInfo(jobId);
         if (jobData?.title) setJobTitle(jobData.title);
-      } catch (e) {
+      } catch {
         console.warn('No se pudo cargar info del trabajo.');
       }
 
@@ -40,6 +40,7 @@ export default function JobPromotionsPage() {
 
   useEffect(() => {
     if (jobId) loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobId]);
 
   const toggleSelection = (id: string) => {
@@ -57,7 +58,7 @@ export default function JobPromotionsPage() {
       await loadData();
       setSelectedIds([]);
       setIsDeleteModalOpen(false);
-    } catch (error) {
+    } catch {
       alert('Hubo un error al eliminar algunas promociones');
     } finally {
       setIsDeleting(false);
@@ -207,3 +208,4 @@ export default function JobPromotionsPage() {
     </div>
   );
 }
+//conclitos resueltos

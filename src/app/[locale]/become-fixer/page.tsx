@@ -3,14 +3,19 @@
 import { useEffect, useState } from 'react';
 import FixerRegisterForm from '@/Components/fixer/Fixer-register-form';
 import { FixerEnableWizard } from '@/Components/fixer/Filter-eneable-wizard';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/app/redux/store';
 import { IUser } from '@/types/user';
 import { useRouter } from 'next/navigation';
 
+import { useGetUserByIdQuery } from '@/app/redux/services/userApi';
+import { setUser } from '@/app/redux/slice/userSlice';
+
 export default function BecomeFixerPage() {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user.user);
+  const dispatch = useDispatch();
+  const [userId, setUserId] = useState<string | null>(null);
 
   const [requester, setRequester] = useState<IUser | null>(null);
 
@@ -20,12 +25,32 @@ export default function BecomeFixerPage() {
     }
   }, [user, router]);
 
+  // Obtener userId desde localStorage
+  useEffect(() => {
+    const token = localStorage.getItem('servineo_user');
+    if (token) {
+      const userData = JSON.parse(token);
+      const id = userData._id || userData.id;
+      setUserId(id);
+    }
+  }, []);
+
+  // Consultar user por ID
+  const { data: userData } = useGetUserByIdQuery(userId!, {
+    skip: !userId,
+  });
+
+  // Guardar user en redux
+  useEffect(() => {
+    if (userData) dispatch(setUser(userData));
+  }, [userData, dispatch]);
+
   const defaultValues = {
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.telefono || '',
   };
-
+  
   return (
     <div>
       <div className='container mx-auto max-w-4xl p-4'>
