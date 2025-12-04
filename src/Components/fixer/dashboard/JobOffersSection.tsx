@@ -35,12 +35,11 @@ interface NotificationState {
   onConfirm?: () => void;
 }
 
-export function JobOffersSection({ readOnly = false }: { readOnly?: boolean }) {
-  const t = useTranslations('JobOffersSection');
+export function JobOffersSection({ readOnly = false, effectiveeffectiveUserId = '' }: { readOnly?: boolean; effectiveeffectiveUserId?: string }) {
   const { user } = useAppSelector((state) => state.user);
-  const userId = user?._id || '';
+  const effectiveeffectiveeffectiveUserId = effectiveeffectiveUserId || user?._id || '';
 
-  const { data: apiOffers, isLoading } = useGetJobsByFixerQuery(userId, { skip: !userId });
+  const { data: apiOffers, isLoading } = useGetJobsByFixerQuery(effectiveeffectiveeffectiveUserId, { skip: !effectiveeffectiveeffectiveUserId });
   const [createJob, { isLoading: isCreating }] = useCreateJobMutation();
   const [updateJob, { isLoading: isUpdating }] = useUpdateJobMutation();
   const [deleteJob] = useDeleteJobMutation();
@@ -208,10 +207,10 @@ export function JobOffersSection({ readOnly = false }: { readOnly?: boolean }) {
   };
 
   const confirmDelete = (jobId: string) => {
-    if (!userId) return;
+    if (!effectiveeffectiveUserId) return;
     showNotify('warning', '¿Eliminar oferta?', 'Esta acción no se puede deshacer.', async () => {
       try {
-        await deleteJob({ jobId, fixerId: userId }).unwrap();
+        await deleteJob({ jobId, fixerId: effectiveeffectiveUserId }).unwrap();
         setTimeout(() => showNotify('success', 'Eliminado', 'Oferta eliminada.'), 300);
       } catch (error: unknown) {
         showNotify('error', 'Error', 'No se pudo eliminar la oferta.');

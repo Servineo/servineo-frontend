@@ -10,16 +10,19 @@ import { PortfolioSection } from '@/Components/fixer/dashboard/PortfolioSection'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/Tabs/Tabs';
 import EstadisticasTrabajos from '@/Components/fixer/Fixer-statistics';
 import { useParams } from 'next/navigation';
-import { useSelector } from 'react-redux';
-import { IUser } from '@/types/user';
 import { JobOffersSection } from '@/Components/fixer/dashboard/JobOffersSection';
+import { useGetUserByIdQuery } from '@/app/redux/services/userApi';
+import { LocationSection } from '@/Components/fixer/dashboard/LocationSection';
+
 
 export default function FixerProfilePage() {
+
   const params = useParams<{ locale: string; id: string }>();
-  const user = useSelector((state: { user: { user: IUser } }) => state.user.user);
+
   const fixerId = params?.id;
+  const { data: userData } = useGetUserByIdQuery(fixerId); // este sera el usuario que para los detalles de las cards
+  console.log('User Data:', userData);
   const [activeTab, setActiveTab] = useState('resumen');
-  const fixerData = user?._id === fixerId ? user : null;
 
   return (
     <div className='min-h-screen bg-gray-50 pb-12'>
@@ -30,10 +33,10 @@ export default function FixerProfilePage() {
             {/* Avatar */}
             <div className='relative'>
               <div className='w-32 h-32 rounded-full overflow-hidden ring-4 ring-white shadow-lg bg-gray-200 flex items-center justify-center'>
-                {user ? (
+                {userData ? (
                   <Image
-                    src={user?.url_photo || '/default-avatar.png'}
-                    alt={user?.name || 'Fixer'}
+                    src={userData?.url_photo || '/default-avatar.png'}
+                    alt={userData?.name || 'Fixer'}
                     width={128}
                     height={128}
                     className='w-full h-full object-cover'
@@ -42,7 +45,7 @@ export default function FixerProfilePage() {
                   <User className='w-16 h-16 text-gray-400' />
                 )}
               </div>
-              {fixerData?.fixerProfile === 'completed' && (
+              {userData?.fixerProfile === 'completed' && (
                 <div
                   className='absolute bottom-1 right-1 bg-blue-500 text-white p-1.5 rounded-full ring-2 ring-white'
                   title='Perfil Verificado'
@@ -57,10 +60,10 @@ export default function FixerProfilePage() {
               <div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
                 <div>
                   <h1 className='text-3xl font-bold text-gray-900'>
-                    {user?.name || 'Cargando...'}
+                    {userData?.name || 'Cargando...'}
                   </h1>
                   <p className='text-lg text-gray-600 font-medium'>
-                    {user?.servicios?.join(', ') || 'Servicios Generales'}
+                    {userData?.servicios?.join(', ') || 'Servicios Generales'}
                   </p>
 
                   <div className='flex items-center gap-4 mt-2 text-sm text-gray-500'>
@@ -72,16 +75,16 @@ export default function FixerProfilePage() {
                     <div className='flex items-center gap-1'>
                       <MapPin className='w-4 h-4' />
                       <span>
-                        {user?.ubicacion?.departamento ||
-                          user?.workLocation?.direccion ||
+                        {userData?.ubicacion?.departamento ||
+                          userData?.workLocation?.direccion ||
                           'Bolivia'}
                       </span>
                     </div>
                   </div>
 
-                  {fixerData?.telefono && (
+                  {userData?.telefono && (
                     <div className='mt-2 text-sm text-gray-600'>
-                      <span className='font-semibold'>Teléfono:</span> {fixerData.telefono}
+                      <span className='font-semibold'>Teléfono:</span> {userData.telefono}
                     </div>
                   )}
                 </div>
@@ -90,9 +93,9 @@ export default function FixerProfilePage() {
                   <PillButton
                     className='bg-primary text-white hover:bg-blue-800 flex items-center gap-2'
                     onClick={() => {
-                      if (fixerData?.telefono) {
+                      if (userData?.telefono) {
                         window.open(
-                          `https://wa.me/${fixerData.telefono.replace(/\s+/g, '')}`,
+                          `https://wa.me/${userData.telefono.replace(/\s+/g, '')}`,
                           '_blank',
                         );
                       }
@@ -110,30 +113,30 @@ export default function FixerProfilePage() {
                 </div>
               </div>
 
-              {fixerData?.description && (
+              {userData?.description && (
                 <p className='mt-4 text-gray-600 max-w-2xl leading-relaxed'>
-                  {fixerData.description}
+                  {userData.description}
                 </p>
               )}
 
               {/* Información adicional */}
               <div className='mt-4 flex flex-wrap gap-4 text-sm'>
-                {fixerData?.vehiculo?.hasVehiculo && (
+                {userData?.vehiculo?.hasVehiculo && (
                   <span className='px-3 py-1 bg-green-100 text-green-700 rounded-full'>
                     🚗 Vehículo propio
                   </span>
                 )}
-                {fixerData?.metodoPago?.hasEfectivo && (
+                {userData?.metodoPago?.hasEfectivo && (
                   <span className='px-3 py-1 bg-blue-100 text-blue-700 rounded-full'>
                     💵 Acepta efectivo
                   </span>
                 )}
-                {fixerData?.metodoPago?.qr && (
+                {userData?.metodoPago?.qr && (
                   <span className='px-3 py-1 bg-purple-100 text-purple-700 rounded-full'>
                     📱 Acepta QR
                   </span>
                 )}
-                {fixerData?.metodoPago?.tarjetaCredito && (
+                {userData?.metodoPago?.tarjetaCredito && (
                   <span className='px-3 py-1 bg-orange-100 text-orange-700 rounded-full'>
                     💳 Acepta tarjeta
                   </span>
@@ -162,29 +165,44 @@ export default function FixerProfilePage() {
             <TabsTrigger value='portafolio' className='px-6'>
               Portafolio
             </TabsTrigger>
+             <TabsTrigger value='ubicacion' className='px-6'>
+              Ubicación
+            </TabsTrigger>
             <TabsTrigger value='estadisticas' className='px-6'>
               Estadísticas
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value='resumen' className='space-y-8'>
-            <JobOffersSection readOnly />
+            <JobOffersSection effectiveeffectiveUserId={userData?._id as string} readOnly />
           </TabsContent>
 
           <TabsContent value='ofertas'>
-            <JobOffersSection readOnly />
+            <JobOffersSection effectiveeffectiveUserId={userData?._id as string} readOnly />
           </TabsContent>
 
           <TabsContent value='experiencia'>
-            <ExperienceSection fixerId={fixerId as string} readOnly />
+            <ExperienceSection fixerId={userData?._id as string} readOnly />
           </TabsContent>
 
           <TabsContent value='certificaciones'>
-            <CertificationsSection fixerId={fixerId as string} readOnly />
+            <CertificationsSection fixerId={userData?._id as string} readOnly />
           </TabsContent>
 
           <TabsContent value='portafolio'>
-            <PortfolioSection fixerId={fixerId as string} readOnly />
+            <PortfolioSection fixerId={userData?._id as string} readOnly />
+          </TabsContent>
+          <TabsContent value='ubicacion'>
+            <LocationSection 
+            fixerId={userData?._id as string} 
+            currentLocation={
+              {
+                lat: userData?.workLocation?.lat ?? 0,
+                lng: userData?.workLocation?.lng ?? 0,
+                direccion: userData?.workLocation?.direccion || '',
+              }
+            } 
+            readOnly />
           </TabsContent>
 
           <TabsContent value='estadisticas'>

@@ -82,13 +82,5 @@ export const jobCategories = [
 ];
 
 export const boliviaCities = [
-  { value: 'Beni', label: 'Beni' },
-  { value: 'Chuquisaca', label: 'Chuquisaca' },
   { value: 'Cochabamba', label: 'Cochabamba' },
-  { value: 'La Paz', label: 'La Paz' },
-  { value: 'Oruro', label: 'Oruro' },
-  { value: 'Pando', label: 'Pando' },
-  { value: 'Potosí', label: 'Potosí' },
-  { value: 'Santa Cruz', label: 'Santa Cruz' },
-  { value: 'Tarija', label: 'Tarija' },
 ];

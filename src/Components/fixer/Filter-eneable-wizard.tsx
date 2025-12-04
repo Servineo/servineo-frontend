@@ -246,9 +246,7 @@ export function FixerEnableWizard({ user }: FixerEnableWizardProps) {
         },
       };
 
-      console.log('Submitting user profile data:', payload);
       await convertToFixer(payload).unwrap();
-
       setSuccess(true);
       setModalState({
         isOpen: true,
