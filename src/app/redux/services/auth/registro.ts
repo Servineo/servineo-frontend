@@ -34,7 +34,10 @@ export async function enviarTokenGoogle(token: string): Promise<GoogleAuthRespon
       body: JSON.stringify({ token }),
     });
 
-    if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
+    if (!res.ok) {
+      throw new Error(`Error ${res.status}: ${res.statusText}`);
+    }
+
     return await res.json();
   } catch (error) {
     console.error('Error al conectar con el backend:', error);
@@ -42,6 +45,11 @@ export async function enviarTokenGoogle(token: string): Promise<GoogleAuthRespon
   }
 }
 
+/**
+ * VERIFICAR SESIÓN EN BACKEND
+ * GET /api/controlC/google/verify
+ * Devuelve algo tipo: { valid: boolean, user?: {...} }
+ */
 export async function verificarSesionBackend(token: string) {
   try {
     const res = await fetch(`${BASE_URL}/google/verify`, {
@@ -57,6 +65,10 @@ export async function verificarSesionBackend(token: string) {
   }
 }
 
+/**
+ * GUARDAR UBICACIÓN DEL USUARIO
+ * POST /api/controlC/ubicacion
+ */
 export async function enviarUbicacion(
   lat: number,
   lng: number,
@@ -75,7 +87,10 @@ export async function enviarUbicacion(
       body: JSON.stringify({ lat, lng, direccion, departamento, pais }),
     });
 
-    if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
+    if (!res.ok) {
+      throw new Error(`Error ${res.status}: ${res.statusText}`);
+    }
+
     return await res.json();
   } catch (error) {
     console.error('Error al enviar la ubicación al backend:', error);
@@ -130,8 +145,14 @@ export async function enviarRegistroManual(
     });
 
     if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `Error ${res.status}`);
+      let errorMessage = `Error ${res.status}`;
+      try {
+        const errorData = await res.json();
+        if (errorData?.message) errorMessage = errorData.message;
+      } catch {
+        // body no es JSON, dejamos el mensaje por defecto
+      }
+      throw new Error(errorMessage);
     }
 
     return await res.json();

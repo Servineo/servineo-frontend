@@ -38,7 +38,7 @@ export default function TopMenu() {
     { name: t('nav.jobOffers'), href: '/job-offer-list', icon: <Briefcase className='h-5 w-5' /> },
     {
       name: t('nav.help'),
-      href: '/ask-for-help/centro_de_ayuda',
+      href: '/ask-for-help',
       icon: <HelpCircle className='h-5 w-5' />,
     },
   ];

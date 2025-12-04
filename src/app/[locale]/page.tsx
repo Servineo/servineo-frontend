@@ -60,12 +60,13 @@ export default function Home() {
           </h2>
           <Map />
           <InspirationSection />
-          <RecentOffersSection />
+          
         </div>
       </section>
       <ServicesSection />
       <HowItWorksSection />
       <CTASection />
     </div>
+    
   );
 }

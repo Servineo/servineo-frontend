@@ -9,7 +9,7 @@ import { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { TranslationButton } from '@/Components/Shared/TranslationButton';
-import BotonesFlotantes from '@/Components/ask_for_help/contenedor';
+import BotonesFlotantes from '@/Components/ask-for-help/contenedor';
 import FooterSection from '@/Components/Home/Footer-section';
 
 const geistSans = Geist({

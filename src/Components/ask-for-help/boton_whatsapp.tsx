@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState, useRef } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -9,12 +10,12 @@ const BotonWhatsapp = () => {
   const [showCaptcha, setShowCaptcha] = useState(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  const numerowhapi = '59178194834';
-  const mensaje = '';
+  const numerowhapi = '59163924249';
+  const mensaje = "Servineo - Escríbenos tu problema para que la IA te ayude";
   const encodedMessage = encodeURIComponent(mensaje);
   const whatsappUrl = `https://wa.me/${numerowhapi}?text=${encodedMessage}`;
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 
   const handleInitialClick = () => {
     if (navigator.onLine) {
@@ -28,7 +29,7 @@ const BotonWhatsapp = () => {
     if (!token) return;
 
     try {
-      const response = await fetch(`${API_URL}/verify-captcha`, {
+      const response = await fetch(`${API_URL}/api/devon/verify-captcha`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),
