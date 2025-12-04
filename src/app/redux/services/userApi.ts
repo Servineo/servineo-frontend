@@ -61,7 +61,7 @@ export const userApi = baseApi.injectEndpoints({
       }
     >({
       query: ({ id, location }) => ({
-        url: `/users/${id}/location`,
+        url: `/user/${id}/location`,
         method: 'PATCH',
         body: { workLocation: location },
       }),
