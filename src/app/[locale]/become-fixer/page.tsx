@@ -5,7 +5,7 @@ import { FixerEnableWizard } from '@/Components/fixer/Filter-eneable-wizard';
 import { Navbar } from '@/Components/Shared/Navbar';
 import { useTranslations } from 'next-intl';
 import { useAppSelector } from '@/app/redux/hooks';
-import { RootState } from '@/app/redux/store';
+//import { RootState } from '@/app/redux/store';
 import { IUser } from '@/types/user';
 import { useRouter } from 'next/navigation';
 import { useGetUserByIdQuery } from '@/app/redux/services/userApi';

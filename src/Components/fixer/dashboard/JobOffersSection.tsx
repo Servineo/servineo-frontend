@@ -10,7 +10,8 @@ import NotificationModal from '@/Components/Modal-notifications';
 import { JobOfferCard } from '@/Components/Job-offers/JobOfferCard';
 import Image from 'next/image';
 import { boliviaCities } from '@/app/lib/validations/Job-offer-Schemas';
-import { useTranslations } from 'next-intl';
+import { t } from 'i18next';
+//import { useTranslations } from 'next-intl';
 import { useAppSelector } from '@/app/redux/hooks';
 import {
   useGetJobsByFixerQuery,
