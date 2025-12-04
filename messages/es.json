@@ -955,7 +955,8 @@
     "buttons": {
       "newOffer": "Nueva Oferta",
       "cancel": "Cancelar",
-      "save": "Guardar"
+      "save": "Guardar",
+      "saving": "Guardando..."
     },
     "card": {
       "defaultTitle": "Sin título",
@@ -967,6 +968,10 @@
     },
     "form": {
       "defaultCity": "Cochabamba",
+      "title": {
+        "label": "Título",
+        "placeholder": "Ej: Reparación de plomería en general"
+      },
       "category": {
         "label": "Categoría",
         "select": "Seleccionar...",
@@ -978,6 +983,13 @@
           "painting": "Pintura"
         }
       },
+      "tags": {
+        "label": "Etiquetas",
+        "empty": "Sin etiquetas. Añade hasta 5 etiquetas",
+        "addTag": "Seleccionar etiqueta",
+        "limitReached": "Máximo 5 etiquetas alcanzado",
+        "alreadyAdded": "(Ya agregado)"
+      },
       "description": {
         "label": "Descripción",
         "placeholder": "Describe tu servicio...",
@@ -988,6 +1000,12 @@
       },
       "city": {
         "label": "Ciudad"
+      },
+      "contactPhone": {
+        "label": "Teléfono de Contacto"
+      },
+      "images": {
+        "label": "Imágenes (máx. 5)"
       }
     },
     "deleteConfirmation": "¿Estás seguro de eliminar esta oferta?"

@@ -76,9 +76,11 @@ export default function BecomeFixerPage() {
                     name: data.name,
                     email: data.email,
                     telefono: data.phone,
-                    url_photo: reduxUser?.url_photo || 'https://picsum.photos/80',
-                    role: 'requester',
-                  } as IUser;
+                    url_photo: user?.url_photo || 'https://picsum.photos/80',
+                    role: user?.role || 'requester',
+                    //authProviders: user?.authProviders || [],
+                  };
+
                   setRequester(finalUser);
                 }}
                 submitButtonText={t('button1')}
