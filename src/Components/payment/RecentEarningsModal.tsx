@@ -95,9 +95,9 @@ export default function RecentEarningsModal({ onClose, fixerId: propFixerId }: P
   const fetchEarnings = async (from: string, to: string) => {
     setLoading(true);
     setError(null);
-
-    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
-
+    
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+    
     try {
       const url = `${BACKEND_URL}/api/lab/earnings/${fixerId}?fromDate=${from}&toDate=${to}`;
       console.log('📊 Cargando ganancias desde:', url);

@@ -59,7 +59,7 @@ export default function CardList({
   const fetchCards = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cards?userId=${requesterId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/cards?userId=${requesterId}`,
       );
       if (!res.ok) throw new Error('Error fetching cards');
       const data = await res.json();
@@ -107,7 +107,7 @@ export default function CardList({
     setConfirmModal(null);
 
     try {
-      const paymentRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/createpayment`, {
+      const paymentRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/createpayment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

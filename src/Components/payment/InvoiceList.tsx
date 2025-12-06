@@ -1,5 +1,5 @@
 // src/Components/payment/InvoiceList.tsx
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   ChevronRight,
@@ -14,22 +14,20 @@ import {
 
 // === FUNCIÓN DE UTILIDAD: Obtiene el ID del usuario desde localStorage ===
 const getRequesterId = () => {
-  // Es vital chequear window !== 'undefined' para Next.js (lado del cliente)
-  const userJson = typeof window !== 'undefined' ? localStorage.getItem('servineo_user') : null;
+  if (typeof window === 'undefined') return null;
+  const userJson = localStorage.getItem('servineo_user');
+  if (!userJson) return null;
 
-  if (userJson) {
-    try {
-      const userData = JSON.parse(userJson);
-      return userData.id; // Retorna el ID
-    } catch (e) {
-      console.error('Error al parsear datos de usuario:', e);
-      return null;
-    }
+  try {
+    const userData = JSON.parse(userJson);
+    return userData.id;
+  } catch (e) {
+    console.error('Error al parsear datos de usuario:', e);
+    return null;
   }
-  return null;
 };
-// =======================================================================
 
+// Interfaces
 export interface BackendInvoice {
   id: string;
   transactionId: string;
@@ -58,22 +56,18 @@ export interface Invoice {
   Total: number;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
 const fetchInvoices = async (): Promise<Invoice[]> => {
-  // === MODIFICACIÓN CLAVE: Obtener el ID y agregarlo a la URL ===
   const requesterId = getRequesterId();
   if (!requesterId) {
     console.warn('Usuario no autenticado. No se puede cargar facturas.');
-    // Devolvemos vacío si no hay ID, previniendo la llamada al backend
     return [];
   }
 
   try {
-    // La URL ahora incluye el ID como Query Parameter (requesterId=...)
     const urlWithId = `${API_URL}/api/v1/invoices?requesterId=${requesterId}`;
     const response = await fetch(urlWithId);
-
     if (!response.ok) {
       const errorBody = await response.text();
       throw new Error(`HTTP error! status: ${response.status}. Response: ${errorBody}`);
@@ -104,6 +98,8 @@ const fetchInvoices = async (): Promise<Invoice[]> => {
 
 const InvoiceList = () => {
   const router = useRouter();
+  const params = useParams();
+  const locale = params?.locale || 'es'; // Fallback a 'es' si no existe
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -155,7 +151,10 @@ const InvoiceList = () => {
     return sortDirection === 'desc' ? dateB - dateA : dateA - dateB;
   });
 
-  const handleInvoiceClick = (invoiceId: string) => router.push(`/detalleFactura/${invoiceId}`);
+  const handleInvoiceClick = (invoiceId: string) => {
+    // Ahora incluye el locale dinámicamente
+    router.push(`/${locale}/payment/detalleFactura/${invoiceId}`);
+  };
 
   if (loading) {
     return (

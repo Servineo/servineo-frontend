@@ -52,7 +52,7 @@ export default function FixerWalletDashboard() {
     setError(null);
 
     // 🟢 CORRECCIÓN: Usar variable de entorno para que funcione en Vercel y Render
-    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
     try {
       console.log(`📡 Conectando a: ${BACKEND_URL}/api/fixer/payment-center/${fixerId}`);

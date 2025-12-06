@@ -111,9 +111,9 @@ const CentroDePagos = () => {
   const fetchFixerData = async (fixerId: string) => {
     setLoading(true);
     setError(null);
-
-    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
-
+    
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+    
     try {
       console.log(`🔍 Intentando conectar a: ${BACKEND_URL}/api/fixer/payment-center/${fixerId}`);
 

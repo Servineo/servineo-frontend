@@ -26,8 +26,8 @@ type PaymentMethod = {
 // URL del backend
 const BACKEND_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  process.env.NEXT_PUBLIC_BACKEND_URL ||
-  'http://localhost:8000';
+  process.env.NEXT_PUBLIC_BACKEND_BASE_URL ||
+  "http://localhost:8000";
 
 export default function PayWithQr() {
   const [intent, setIntent] = useState<Intent | null>(null);

@@ -1,6 +1,11 @@
-import { Suspense } from 'react';
+"use client"; // OBLIGATORIO para usar useEffect y useSearchParams
+
+import { Suspense, useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import RechargePageClient from './RechargePageClient'; // Importa el archivo que renombraste
+import RechargePageClient from './RechargePageClient';
+import { useSearchParams } from 'next/navigation';
+
+
 
 // Un componente simple de carga
 function LoadingFallback() {
@@ -14,11 +19,21 @@ function LoadingFallback() {
   );
 }
 
+
+
 // Esta es tu nueva página.
 export default function RechargePage() {
+  const searchParams = useSearchParams();
+  const [fixerId, setFixerId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const id = searchParams.get("fixerId");
+    setFixerId(id);
+  }, [searchParams]);
+
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <RechargePageClient userid={'6928d79bba289c48b60798ad'} />
+      <RechargePageClient userid={fixerId}/>
     </Suspense>
   );
 }

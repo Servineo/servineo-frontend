@@ -42,15 +42,12 @@ export default function TransferBank({ fixerId, servineoId, amount }: TransferBa
       }
 
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/transferencia-bancaria/intent`,
-          {
-            //const res = await fetch('/api/transferencia-bancaria/intent'   , {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fixerId, amount, servineoId }),
-          },
-        );
+       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/transferencia-bancaria/intent`   , {
+        //const res = await fetch('/api/transferencia-bancaria/intent'   , {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fixerId, amount, servineoId }),
+        });
 
         console.log('Response status:', res.status);
 

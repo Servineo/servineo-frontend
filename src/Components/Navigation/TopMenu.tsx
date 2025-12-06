@@ -368,6 +368,37 @@ export default function TopMenu() {
         <ClipboardList className="h-4 w-4" />
         Confirmar Pagos
       </button>
+    </>
+  );
+
+  /* ---------- Content for Requester Menu ---------- */
+  const renderRequesterMenu = () => (
+    <>
+      <button
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+          setProfileMenuOpen(false);
+          router.push('/requesterEdit/perfil');
+        }}
+        className="menuItem w-full text-left flex items-center gap-2"
+      >
+        <UserCircle className="h-4 w-4" />
+        Editar perfil
+      </button>
+
+      <button
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+          setProfileMenuOpen(false);
+          router.push('/become-fixer');
+        }}
+        className="menuItem w-full text-left flex items-center gap-2"
+      >
+        <Wrench className="h-4 w-4" />
+        Convertirse en Fixer
+      </button>
 
       <button
         onMouseDown={(e) => e.stopPropagation()}
@@ -512,36 +543,8 @@ export default function TopMenu() {
 
                     <hr style={{ margin: '8px 0', opacity: 0.3 }} />
 
-                    {user?.role !== 'fixer' && (
-                      <>
-                        <button
-                          onMouseDown={(e) => e.stopPropagation()}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setProfileMenuOpen(false);
-                            router.push('/requesterEdit/perfil');
-                          }}
-                          className='menuItem'
-                        >
-                          Editar perfil
-                        </button>
-
-                        <button
-                          onMouseDown={(e) => e.stopPropagation()}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setProfileMenuOpen(false);
-                            router.push('/become-fixer');
-                          }}
-                          className='menuItem'
-                        >
-                          Convertirse en Fixer
-                        </button>
-                      </>
-                    )}
-
-                    {/* MENÚ FIXER DESKTOP */}
-                    {user?.role === 'fixer' && renderFixerMenu()}
+                    {/* MENÚ SEGÚN ROL DESKTOP */}
+                    {user?.role === 'fixer' ? renderFixerMenu() : renderRequesterMenu()}
 
                     <button
                       onMouseDown={(e) => e.stopPropagation()}
@@ -549,7 +552,7 @@ export default function TopMenu() {
                         e.stopPropagation();
                         doLogout();
                       }}
-                      className={`menuItem logoutBtn`}
+                      className='menuItem logoutBtn'
                     >
                       Cerrar sesión
                     </button>
@@ -606,7 +609,7 @@ export default function TopMenu() {
                 />
               </div>
 
-              {/* Botón de perfil sin margen negativo */}
+              {/* Botón de perfil */}
               <button
                 onClick={() => setProfileMenuOpen(!profileMenuOpen)}
                 ref={profileButtonRef}
@@ -656,36 +659,8 @@ export default function TopMenu() {
 
                   <hr style={{ margin: '8px 0', opacity: 0.3 }} />
 
-                  {user?.role !== 'fixer' && (
-                    <>
-                      <button
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setProfileMenuOpen(false);
-                          router.push('/requesterEdit/perfil');
-                        }}
-                        className='menuItem'
-                      >
-                        Editar perfil
-                      </button>
-
-                      <button
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setProfileMenuOpen(false);
-                          router.push('/become-fixer');
-                        }}
-                        className='menuItem'
-                      >
-                        Convertirse en Fixer
-                      </button>
-                    </>
-                  )}
-
-                  {/* MENÚ FIXER MOBILE (Reutilizado) */}
-                  {user?.role === 'fixer' && renderFixerMenu()}
+                  {/* MENÚ SEGÚN ROL MOBILE */}
+                  {user?.role === 'fixer' ? renderFixerMenu() : renderRequesterMenu()}
 
                   <button
                     onMouseDown={(e) => e.stopPropagation()}
@@ -693,7 +668,7 @@ export default function TopMenu() {
                       e.stopPropagation();
                       doLogout();
                     }}
-                    className={`menuItem logoutBtn`}
+                    className='menuItem logoutBtn'
                   >
                     Cerrar sesión
                   </button>
@@ -723,6 +698,7 @@ export default function TopMenu() {
             </div>
           )}
         </div>
+
         {/* Barra inferior fija con iconos */}
         <nav className='fixed bottom-0 left-0 right-0 h-16 border-t border-gray-200 bg-white/95 backdrop-blur-sm flex justify-around items-center z-50'>
           {navItems.map((item) => (
@@ -740,6 +716,7 @@ export default function TopMenu() {
             </button>
           ))}
         </nav>
+
         {/* Espaciadores para contenido */}
         <div className='h-16' /> {/* top */}
         <div className='h-16' /> {/* bottom */}

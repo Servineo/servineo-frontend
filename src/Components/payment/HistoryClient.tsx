@@ -67,8 +67,8 @@ export default function FixerWalletHistory() {
   const fetchHistoryData = async (fixerId: string) => {
     setLoading(true);
     setError(null);
-    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
-
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+    
     try {
       const res = await fetch(`${BACKEND_URL}/api/fixer/payment-center/${fixerId}`);
       if (!res.ok) {

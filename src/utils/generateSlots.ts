@@ -1,6 +1,6 @@
 // lib/generateAvailableSlotsFromAPI.ts
 
-const API = process.env.NEXT_PUBLIC_BACKEND as string;
+const API = process.env.NEXT_PUBLIC_BACKEND_BASE_URL as string;
 
 import moment from 'moment';
 import axios from 'axios';

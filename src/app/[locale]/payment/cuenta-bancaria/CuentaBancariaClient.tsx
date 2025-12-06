@@ -8,7 +8,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 // *************************************************************
 // 1. CONFIGURACIÓN DE URL Y CLAVES
 // *************************************************************
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
 // 🟢 CONFIGURACIÓN: Usamos tu variable _MINE y limpiamos espacios (.trim())
 const RECAPTCHA_SITE_KEY = (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY_MINE || '').trim();

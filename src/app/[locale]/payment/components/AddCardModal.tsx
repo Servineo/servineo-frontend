@@ -84,7 +84,7 @@ export default function AddCardModal({
 
       let cardId = null;
       if (saveCard) {
-        const cardRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cardscreate`, {
+        const cardRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/cardscreate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -99,7 +99,7 @@ export default function AddCardModal({
         cardId = savedCard._id;
       }
 
-      const paymentRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/createpayment`, {
+      const paymentRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/createpayment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
